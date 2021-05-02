@@ -1,0 +1,18 @@
+<mat-card>
+    <h1 mat-card-title>Login</h1>
+    <mat-error *ngIf="!!errorMessage">{{errorMessage}}</mat-error>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>password</mat-label>
+            <input matInput type="password" formControlName="password">
+        </mat-form-field>
+    </form>
+    <div class="actions">
+        <a mat-flat-button routerLink="/register" class="create-link">Create a new account</a>
+        <button mat-raised-button color="primary">Login</button>
+    </div>
+</mat-card>

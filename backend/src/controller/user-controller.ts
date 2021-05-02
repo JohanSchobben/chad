@@ -1,13 +1,23 @@
 import {Request, Response} from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User, {UserStatus} from "../models/User";
+import User from "../models/User";
+import RefreshToken from "../models/refreshToken";
 import {RegisterForm} from "../forms/register-form";
 import { LoginForm } from "../forms/login-form";
+import crypto from "crypto";
+import { getEnvVar } from "../env";
 
+let code = crypto.randomBytes(10).toString('hex');
+
+export const getRegisterToken = async (req: Request<any, RegisterForm>, res: Response) => {
+    res.json({
+        secretCode: code
+    });
+}
 
 export const register = async (req: Request<any, RegisterForm>, res: Response) => {
-    const {username, password, secretQuestion, secretAnswer} = req.body;
+    const {username, password, secretQuestion, secretAnswer, registerToken} = req.body;
     const encryptedPassword = await bcrypt.hash(password, 12);
 
     const userExists = await User.findOne({
@@ -16,22 +26,31 @@ export const register = async (req: Request<any, RegisterForm>, res: Response) =
         }
     });
 
+    if (code !== registerToken) {
+        res.status(422).json({
+            message: "secret code is incorrect"
+        });
+        return;
+    } 
+
     if (userExists) {
-        return res.status(422).json({
+        res.status(422).json({
             message: "user already exists"
-        })
+        });
+        return;
     } else {
         User.create({
             username: username,
             password: encryptedPassword,
             secretQuestion: secretQuestion,
             secretAnswer: secretAnswer,
-            status: UserStatus.Registrating
         });
+
+        code = crypto.randomBytes(10).toString('hex');
 
         res.status(201).json({
             message: "user created",
-        })
+        });
     }
 }
 
@@ -87,10 +106,27 @@ export const login = async (req: Request<null, LoginForm>, res:  Response) => {
     const passwordCorrect = await bcrypt.compare(password, user.password);
 
     if (passwordCorrect) {
-        const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+        const payload = {username: user.username, id: user.id};
+
+        const token = jwt.sign(payload, getEnvVar('ACCESS_TOKEN_SECRET'), {expiresIn: '7h'});
+        const refreshToken = jwt.sign(payload, getEnvVar('REFRESH_TOKEN_SECRET'), {expiresIn: "7d"});
+        RefreshToken.create({
+            token: refreshToken
+        });
+
+        res.status(200).json({
+            accesToken: token,
+            refreshToken: refreshToken,
+            user: user.username
+        });
     } else {
         res.status(401).json({
             message: "Incorrect password"
         });
     }
+}
+
+export const refreshToken = async (req: Request<null, LoginForm>, res:  Response) => {
+    const token = req.body.token;
+    
 }

@@ -1,10 +1,6 @@
 import { sequelize } from "../database/database";
 import { STRING, INTEGER, ENUM, Model } from "sequelize";
 
-export const enum UserStatus {
-    Registrating = "registrating",
-    Active = 'active',
-}
 
 interface UserAttributes {
     id: number;
@@ -13,7 +9,6 @@ interface UserAttributes {
     secretQuestion: string,
     secretAnswer: string,
     resetCode: string,
-    status: UserStatus
 }
 
 interface UserCreateAttributes {
@@ -21,7 +16,6 @@ interface UserCreateAttributes {
     password: string;
     secretQuestion: string,
     secretAnswer: string,
-    status: UserStatus
 }
 
 class User extends Model<UserAttributes, UserCreateAttributes> implements UserAttributes {
@@ -31,7 +25,6 @@ class User extends Model<UserAttributes, UserCreateAttributes> implements UserAt
     secretQuestion: string;
     secretAnswer: string;
     resetCode: string;
-    status: UserStatus;
 }
 
 const UserModel = sequelize.define<User>("users", {
@@ -60,11 +53,6 @@ const UserModel = sequelize.define<User>("users", {
         type: STRING(50),
         unique: false,
         allowNull: false
-    },
-    status: {
-        type: STRING(10),
-        allowNull: false,
-        unique: false,
     },
     resetCode: {
         type: STRING(10),

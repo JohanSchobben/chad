@@ -1,5 +1,12 @@
 import {Sequelize} from "sequelize";
+import { getEnvVar } from "../env";
 
-export const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+
+
+const dbName = getEnvVar("DB_NAME");
+const dbUser = getEnvVar("DB_USER");
+const dbPassword = getEnvVar("DB_PASSWORD");
+
+export const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     dialect: "mariadb"
 });

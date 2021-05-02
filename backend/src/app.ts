@@ -1,14 +1,7 @@
 import express from "express";
-import * as dotenv  from "dotenv";
-import path from "path";
-import {sequelize} from "./database/database"
+
+import {sequelize} from "./database/database";
 import routes from "./router/router";
-
-
-const paths = __dirname.split(path.sep);
-paths.pop();
-const parent = paths.join(path.sep);
-dotenv.config({path: parent + path.sep +".env"})
 
 const app = express();
 const router = express.Router();

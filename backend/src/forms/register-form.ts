@@ -3,4 +3,5 @@ export interface RegisterForm {
     password: string;
     secretQuestion: string;
     secretAnswer: string;
+    registerToken: string;
 }

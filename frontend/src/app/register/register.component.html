@@ -1,0 +1,27 @@
+<mat-card>
+    <h1 mat-card-title>Register new account</h1>
+    <mat-error *ngIf="!!errorMessage">{{errorMessage}}</mat-error>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>password</mat-label>
+            <input matInput type="password" formControlName="password">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>password confirm</mat-label>
+            <input matInput type="password" formControlName="passwordConfirm">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Registration code</mat-label>
+            <input matInput type="text" formControlName="registrationCode">
+            <mat-hint>Contact johan for the registration code</mat-hint>
+        </mat-form-field>
+    </form>
+    <div class="actions">
+        <a mat-flat-button routerLink="/login" class="login-link">I already have a account</a>
+        <button mat-raised-button color="primary">Register</button>
+    </div>
+</mat-card>
