@@ -4,20 +4,20 @@ import jwt from "jsonwebtoken";
 import { getEnvVar } from "../env";
 
 
-export const generateAccesToken = (user: User) => {
+export const generateAccesToken = (user: User): string => {
     const payload = {
         username: user.username,
         id: user.id
     };
-    jwt.sign(payload, getEnvVar('ACCESS_TOKEN_SECRET'), {expiresIn: "7h"});
+    return jwt.sign(payload, getEnvVar('ACCESS_TOKEN_SECRET'), {expiresIn: "7h"});
 }
 
-export const generateRefreshToken = (user: User) => {
+export const generateRefreshToken = (user: User): string => {
     const payload = {
         username: user.username,
         id: user.id
     };
-    jwt.sign(payload, getEnvVar('REFRESH_TOKEN_SECRET'), {expiresIn: "7d"});
+    return jwt.sign(payload, getEnvVar('REFRESH_TOKEN_SECRET'), {expiresIn: "7d"});
 }
 
 export const authorize = (req: Request, res: Response, next: NextFunction) => {

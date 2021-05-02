@@ -7,8 +7,8 @@ import {RegisterForm} from "../forms/register-form";
 import { LoginForm } from "../forms/login-form";
 import crypto from "crypto";
 import { getEnvVar } from "../env";
-import { generateAccesToken } from "src/utils/authorization";
-import { generateRefreshToken } from "src/utils/authorization";
+import { generateAccesToken } from "../utils/authorization";
+import { generateRefreshToken } from "../utils/authorization";
 
 let code = crypto.randomBytes(10).toString('hex');
 
@@ -108,8 +108,6 @@ export const login = async (req: Request<null, LoginForm>, res:  Response) => {
     const passwordCorrect = await bcrypt.compare(password, user.password);
 
     if (passwordCorrect) {
-        const payload = {username: user.username, id: user.id};
-
         const token = generateAccesToken(user);
         const refreshToken = generateRefreshToken(user);
         RefreshToken.create({
