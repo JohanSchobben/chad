@@ -1,5 +1,5 @@
 import { sequelize } from "../database/database";
-import { STRING, INTEGER, ENUM, Model } from "sequelize";
+import { STRING, INTEGER, Model } from "sequelize";
 
 
 interface UserAttributes {
@@ -18,7 +18,7 @@ interface UserCreateAttributes {
     secretAnswer: string,
 }
 
-class User extends Model<UserAttributes, UserCreateAttributes> implements UserAttributes {
+export class User extends Model<UserAttributes, UserCreateAttributes> implements UserAttributes {
     id: number;
     username: string;
     password: string;

@@ -1,4 +1,4 @@
-import {Request, Response} from "express";
+import {Request, response, Response} from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
@@ -7,6 +7,8 @@ import {RegisterForm} from "../forms/register-form";
 import { LoginForm } from "../forms/login-form";
 import crypto from "crypto";
 import { getEnvVar } from "../env";
+import { generateAccesToken } from "src/utils/authorization";
+import { generateRefreshToken } from "src/utils/authorization";
 
 let code = crypto.randomBytes(10).toString('hex');
 
@@ -108,8 +110,8 @@ export const login = async (req: Request<null, LoginForm>, res:  Response) => {
     if (passwordCorrect) {
         const payload = {username: user.username, id: user.id};
 
-        const token = jwt.sign(payload, getEnvVar('ACCESS_TOKEN_SECRET'), {expiresIn: '7h'});
-        const refreshToken = jwt.sign(payload, getEnvVar('REFRESH_TOKEN_SECRET'), {expiresIn: "7d"});
+        const token = generateAccesToken(user);
+        const refreshToken = generateRefreshToken(user);
         RefreshToken.create({
             token: refreshToken
         });
@@ -128,5 +130,56 @@ export const login = async (req: Request<null, LoginForm>, res:  Response) => {
 
 export const refreshToken = async (req: Request<null, LoginForm>, res:  Response) => {
     const token = req.body.token;
-    
+    const tokenFromDb = await RefreshToken.findOne({
+        where: {
+            token: token
+        }
+    });
+
+    if (!tokenFromDb) {
+        res.status(401).json({
+            message: "token is invalid"
+        });
+    }
+
+    jwt.verify(token, getEnvVar('REFRESH_TOKEN'), async (err, decoded) => {
+        if(err) {
+            res.status(401).json({
+                message: "token expired"
+            });
+        } else {
+            const user = await User.findOne({
+                where: {
+                    id: decoded.payload.id
+                }
+            });
+
+            await RefreshToken.destroy({
+                where: {
+                    id: tokenFromDb.id
+                }
+            });
+
+            const accesToken = generateAccesToken(user);
+            const refreshToken = generateRefreshToken(user);
+
+            res.json({
+                accesToken,
+                refreshToken
+            });
+        }
+    });
+}
+
+export const generateResetCode = async (req: Request, res:  Response) => {
+    const id = req.params.id;
+    const code = crypto.randomBytes(10).toString('hex');
+    const user = await User.findByPk(id);
+    user.resetCode = code;
+    user.save();
+
+    res.status(200).json({
+        message: "reset code created",
+        resetCode: code
+    });
 }
