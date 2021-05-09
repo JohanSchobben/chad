@@ -42,3 +42,16 @@ export const authorize = (req: Request, res: Response, next: NextFunction) => {
         }
     });
 }
+
+export const getUserIdFromToken = (token: string)=> {
+
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, getEnvVar('ACCESS_TOKEN_SECRET'), (err, decoded) => {
+            if (err) {
+                reject();
+            }
+            resolve((decoded as any).id);
+        });
+    })
+
+}

@@ -1,0 +1,22 @@
+@host = http://localhost:3000/api
+
+GET {{host}}/register
+{
+
+}
+
+###
+POST {{host}}/login
+
+{
+    "username": "joowtjuh",
+    "password": "geheim"
+}
+
+###
+
+POST {{host}}/auth/refresh
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impvb3d0anVoIiwiaWQiOjEsImlhdCI6MTYyMDA2ODI4MCwiZXhwIjoxNjIwNjczMDgwfQ.cPEHTX9JYEClG55ECQUp7aBosAbrgSbfuhkSkTnxSG4"
+}

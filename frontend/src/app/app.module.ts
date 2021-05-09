@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,13 +14,17 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { TokenInterceptor } from './token.interceptor';
+import { UserService } from './user.service';
+import { RoomsComponent } from './rooms/rooms.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    RoomsComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +38,16 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
     MatButtonModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: TokenInterceptor,
+      deps: [
+        UserService
+      ]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
