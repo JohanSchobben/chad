@@ -140,15 +140,17 @@ export const refreshToken = async (req: Request<null, LoginForm>, res:  Response
         });
     }
 
-    jwt.verify(token, getEnvVar('REFRESH_TOKEN'), async (err, decoded) => {
+    jwt.verify(token, getEnvVar('REFRESH_TOKEN_SECRET'), async (err, decoded) => {
         if(err) {
+            console.log(err)
             res.status(401).json({
-                message: "token expired"
+                message: "token expired!"
             });
         } else {
+            console.dir(decoded)
             const user = await User.findOne({
                 where: {
-                    id: decoded.payload.id
+                    id: decoded.id
                 }
             });
 

@@ -10,6 +10,7 @@ router.post('/login', login);
 router.post('/auth/reset-pw', resetPassword);
 router.get('/register-token', getRegisterToken);
 router.get('/reset-code/:id', authorize, generateResetCode);
-router.get('/auth/refresh', refreshToken);
+router.post('/auth/refresh', refreshToken);
+
 
 export default router;
