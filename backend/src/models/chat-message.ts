@@ -1,39 +1,27 @@
 import { sequelize } from "../database/database";
 import { STRING, INTEGER, Model, TEXT } from "sequelize";
+import UserModel from "./User";
 
-
-interface ChatMessageAttribute {
+export class ChatMessage extends Model {
     id: number;
     user: number;
     message: string;
+    userId: number;
 }
 
-interface ChatMessageCreateAttributes {
-    user: number;
-    message: string;
-}
-
-export class ChatMessage extends Model<ChatMessageAttribute, ChatMessageAttribute> implements ChatMessageAttribute {
-    id: number;
-    user: number;
-    message: string;
-
-}
-
-const UserModel = sequelize.define<ChatMessage>("users", {
+const ChatMessageModel = sequelize.define<ChatMessage>("chatmessage", {
     id: {
         type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
     },
-    user: {
-        type
-    },
     message: {
         type: TEXT,
         allowNull: false
-    }
+    },
 });
 
-export default UserModel;
+ChatMessageModel.belongsTo(UserModel, {onDelete: 'CASCADE', })
+UserModel.hasMany(ChatMessageModel);
+export default ChatMessageModel;
