@@ -21,16 +21,4 @@ export class LoginService {
   public register(registerData): Observable<User> {
     return this.http.post<User>("/api/register", registerData);
   }
-
-  public refresh(): Observable<Tokens> {
-    return this.http.post<Tokens>('/api/refresh', {
-      token: localStorage.getItem('refresh-token')
-    }).pipe(
-      tap((tokens: Tokens) => {
-        localStorage.setItem('access-token', tokens.access);
-        localStorage.setItem('refresh-token', tokens.refresh);
-      })
-    )
-  }
-
 }

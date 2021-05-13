@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { User } from './models/user';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Tokens } from './models/Tokens';
+import { User } from './models/user';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class AuthService {
 
   private userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   constructor(private http: HttpClient) { 
@@ -36,4 +38,17 @@ export class UserService {
   getUser() {
     return this.userSubject.asObservable();
   }
+  
+
+  public refresh(): Observable<Tokens> {
+    return this.http.post<Tokens>('/api/refresh', {
+      token: localStorage.getItem('refresh-token')
+    }).pipe(
+      tap((tokens: Tokens) => {
+        localStorage.setItem('access-token', tokens.access);
+        localStorage.setItem('refresh-token', tokens.refresh);
+      })
+    )
+  }
+
 }

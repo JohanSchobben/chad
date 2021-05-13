@@ -22,7 +22,13 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    
+    console.log(this.formGroup)
+    if (this.formGroup.valid) {
+      this.loginService.register(this.formGroup.value)
+        .subscribe((response) => {
+          console.log(response)
+        })
+    }
   }
 
 }

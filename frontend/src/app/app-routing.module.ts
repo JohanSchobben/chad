@@ -6,7 +6,7 @@ import { RegisterComponent } from './register/register.component';
 import { RoomsComponent } from './rooms/rooms.component';
 
 const routes: Routes = [
-  { path: "", component: RoomsComponent, canActivate: }
+  { path: "", component: RoomsComponent},
   { path: "login", component: LoginComponent},
   { path: "register", component: RegisterComponent},
   { path: "password-reset", component: PasswordResetComponent},

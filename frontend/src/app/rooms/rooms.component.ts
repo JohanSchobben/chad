@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth.service';
 import { User } from '../models/user';
-import { UserService } from '../user.service';
 
 @Component({
   selector: 'chad-rooms',
@@ -11,10 +11,10 @@ import { UserService } from '../user.service';
 export class RoomsComponent implements OnInit {
 
   user$: Observable<User>
-  constructor(private userService: UserService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.user$ = this.userService.getUser();
+    this.user$ = this.authService.getUser();
   }
 
 }

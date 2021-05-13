@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -7,12 +7,13 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { LoginService } from './login/login.service';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  private authService: AuthService;
   private refreshTokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   private refreshing = false;
 
@@ -29,7 +30,10 @@ export class TokenInterceptor implements HttpInterceptor {
     TokenInterceptor._notAppliedTo = value;
   }
 
-  constructor(private readonly loginService: LoginService) {}
+  constructor(inj: Injector) {
+    
+    this.authService = inj.get(AuthService)
+  }
 
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -55,7 +59,7 @@ export class TokenInterceptor implements HttpInterceptor {
       this.refreshing = true;
       this.refreshTokenSubject.next(null);
 
-      return this.loginService.refresh().pipe(
+      return this.authService.refresh().pipe(
         switchMap(tokens => {
           this.refreshing = false;
           this.refreshTokenSubject.next(tokens.refresh);

@@ -1,6 +1,6 @@
     <h1 mat-card-title>Register new account</h1>
     <mat-error *ngIf="!!errorMessage">{{errorMessage}}</mat-error>
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" id="register-form">
         <mat-form-field>
             <mat-label>Username</mat-label>
             <input matInput formControlName="username">
@@ -21,5 +21,5 @@
     </form>
     <div class="actions">
         <a mat-flat-button routerLink="/login" class="login-link">I already have a account</a>
-        <button mat-raised-button color="primary">Register</button>
+        <button mat-raised-button form="register-form" color="primary">Register</button>
     </div>

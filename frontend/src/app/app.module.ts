@@ -15,7 +15,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { TokenInterceptor } from './token.interceptor';
-import { UserService } from './user.service';
 import { RoomsComponent } from './rooms/rooms.component';
 
 @NgModule({
@@ -42,10 +41,7 @@ import { RoomsComponent } from './rooms/rooms.component';
     {
       provide: HTTP_INTERCEPTORS,
       multi: true,
-      useClass: TokenInterceptor,
-      deps: [
-        UserService
-      ]
+      useClass: TokenInterceptor
     }
   ],
   bootstrap: [AppComponent]
