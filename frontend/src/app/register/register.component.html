@@ -14,8 +14,27 @@
             <input matInput type="password" formControlName="passwordConfirm">
         </mat-form-field>
         <mat-form-field>
+            <mat-label>Secret question</mat-label>
+            <mat-select formControlName="secretQuestion">
+                <mat-option></mat-option>
+                <mat-option value="what is your favorite food?">
+                    what is your favorite food?
+                </mat-option>
+                <mat-option value="what is your place of birth?">
+                    what is your place of birth?
+                </mat-option>
+                <mat-option value="what is the name of your first pet?">
+                    what is the name of your first pet?
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+        <mat-form-field>
+            <mat-label>secret Answer</mat-label>
+            <input matInput type="text" formControlName="secretAnswer">
+        </mat-form-field>
+        <mat-form-field>
             <mat-label>Registration code</mat-label>
-            <input matInput type="text" formControlName="registrationCode">
+            <input matInput type="text" formControlName="registerToken">
             <mat-hint>Contact johan for the registration code</mat-hint>
         </mat-form-field>
     </form>

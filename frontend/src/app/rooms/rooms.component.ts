@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 import { User } from '../models/user';
 
@@ -14,7 +15,8 @@ export class RoomsComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.user$ = this.authService.getUser();
+    this.user$ = this.authService.getUser()
+    .pipe(tap(e => console.log(e)));
   }
 
 }

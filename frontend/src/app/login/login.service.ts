@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { LoginRequest } from '../models/requests/login-request';
 import { LoginResponse } from '../models/responses/login-response';
-import { Tokens } from '../models/Tokens';
 import { User } from '../models/user';
 
 @Injectable({

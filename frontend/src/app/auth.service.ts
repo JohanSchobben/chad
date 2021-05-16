@@ -19,17 +19,17 @@ export class AuthService {
     const accessToken = localStorage.getItem('access-token');
 
     if(accessToken) {
-      this.http.get<User>('/api/me')
-      .subscribe(user => {
-        this.userSubject.next(user)
+      this.http.post<{user: User}>('/api/me', {
+        token: accessToken
+      })
+      .subscribe(response => {
+        this.userSubject.next(response.user)
       });
     }
   }
 
-  setUser(username: string, accesToken: string, refreshToken: string) {
-    this.userSubject.next({
-      username
-    });
+  setUser(user: User, accesToken: string, refreshToken: string) {
+    this.userSubject.next(user);
 
     localStorage.setItem("access-token", accesToken);
     localStorage.setItem("refresh_token", refreshToken);

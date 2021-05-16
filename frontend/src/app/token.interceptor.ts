@@ -37,7 +37,12 @@ export class TokenInterceptor implements HttpInterceptor {
 
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    console.log("handle");
+    console.log(this.authService);
+    
     if (TokenInterceptor.notAppliedTo.includes(request.url)) return next.handle(request);
+    console.log("here");
+    
     const clone = request.clone({
       setHeaders: {
         'Authorization': localStorage.getItem('access-token')

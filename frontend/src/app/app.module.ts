@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -35,13 +36,14 @@ import { RoomsComponent } from './rooms/rooms.component';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatButtonModule,
+    MatSelectModule,
     HttpClientModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
       multi: true,
-      useClass: TokenInterceptor
     }
   ],
   bootstrap: [AppComponent]
